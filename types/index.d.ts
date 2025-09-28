@@ -17,7 +17,7 @@ enum Subject {
   business = "business",
 }
 
-type Companion = Models.DocumentList<Models.Document> & {
+type Guide = Models.DocumentList<Models.Document> & {
   $id: string;
   name: string;
   subject: Subject;
@@ -26,7 +26,7 @@ type Companion = Models.DocumentList<Models.Document> & {
   bookmarked: boolean;
 };
 
-interface CreateCompanion {
+interface CreateGuide {
   name: string;
   subject: string;
   topic: string;
@@ -35,7 +35,7 @@ interface CreateCompanion {
   duration: number;
 }
 
-interface GetAllCompanions {
+interface GetAllGuides {
   limit?: number;
   page?: number;
   subject?: string | string[];
@@ -65,14 +65,13 @@ interface Avatar {
   className?: string;
 }
 
-
 interface SavedMessage {
   role: "user" | "system" | "assistant";
   content: string;
 }
 
-interface CompanionComponentProps {
-  companionId: string;
+interface GuideComponentProps {
+  guideId: string;
   subject: string;
   topic: string;
   name: string;

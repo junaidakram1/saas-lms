@@ -1,4 +1,7 @@
+import CTA from "@/components/CTA";
 import GuideCard from "@/components/GuideCard";
+import GuideList from "@/components/GuideList";
+import { recentSessions } from "@/constants";
 
 const Page = () => {
   return (
@@ -37,6 +40,14 @@ const Page = () => {
           duration={30}
           color="#ff6ea6"
         />
+      </section>
+      <section className="flex gap-10">
+        <GuideList
+          title="Recently Completed Guides"
+          guides={recentSessions}
+          classNames="w-2/3 max-lg:w-full mb-10"
+        />
+        <CTA />
       </section>
     </main>
   );

@@ -38,7 +38,7 @@ const GuideCard = ({
 
       <Link href={`/companions/${id}`} className="w-full">
         <button className="btn-primary w-full justify-center">
-          Launch Lesson
+          Let's Start
         </button>
       </Link>
     </article>
