@@ -41,7 +41,7 @@ const Page = () => {
           color="#ff6ea6"
         />
       </section>
-      <section className="flex gap-10">
+      <section className="flex flex-col sm:flex-row gap-10">
         <GuideList
           title="Recently Completed Guides"
           guides={recentSessions}
