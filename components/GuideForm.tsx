@@ -24,6 +24,8 @@ import {
 } from "@/components/ui/select";
 import { subjects } from "@/constants";
 import { Textarea } from "@/components/ui/textarea";
+import { createGuide } from "@/lib/actions/guide.actions";
+import { redirect } from "next/navigation";
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Guide is required." }),
@@ -53,7 +55,14 @@ const GuideForm = () => {
   });
 
   const onSubmit: SubmitHandler<FormSchema> = async (values) => {
-    console.log(values);
+    const guide = await createGuide(values);
+
+    if (guide) {
+      redirect(`/guides/${guide.id}`);
+    } else {
+      console.log("Failed to create a guide");
+      redirect("/");
+    }
   };
   return (
     <Form {...form}>
