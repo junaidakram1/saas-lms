@@ -1,6 +1,8 @@
 import { getAllGuides } from "@/lib/actions/guide.actions";
 import GuideCard from "@/components/GuideCard";
 import { getSubjectColor } from "@/lib/utils";
+import SearchInput from "@/components/SearchInput";
+import SubjectFilter from "@/components/SubjectFilter";
 
 const GuideLibrary = async ({
   searchParams,
@@ -19,7 +21,8 @@ const GuideLibrary = async ({
       <section className="flex justify-between gap-4 max-sm:flex-col">
         <h1>Guide Learning Hub</h1>
         <div className="flex gap-4">
-          <h3>Filters</h3>
+          <SearchInput />
+          <SubjectFilter />
         </div>
       </section>
       <section className="companions-grid">
