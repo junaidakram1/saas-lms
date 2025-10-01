@@ -25,7 +25,7 @@ const GuideLibrary = async ({
           <SubjectFilter />
         </div>
       </section>
-      <section className="companions-grid">
+      <section className="guides-grid">
         {guides.map((guide) => (
           <GuideCard
             key={guide.id}
