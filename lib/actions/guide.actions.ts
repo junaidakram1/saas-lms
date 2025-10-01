@@ -17,3 +17,32 @@ export const createGuide = async (formData: CreateGuide) => {
 
   return data[0];
 };
+
+export const getAllGuides = async ({
+  limit = 10,
+  page = 1,
+  subject,
+  topic,
+}: GetAllGuides) => {
+  const supabase = createSupabaseClient();
+
+  let query = supabase.from("guides").select();
+
+  if (subject && topic) {
+    query = query
+      .ilike("subject", `%${subject}%`)
+      .or(`topic.ilike.%${topic}%,name.ilike.%${topic}%`);
+  } else if (subject) {
+    query = query.ilike("subject", `%${subject}%`);
+  } else if (topic) {
+    query = query.or(`topic.ilike.%${topic}%,name.ilike.%${topic}%`);
+  }
+
+  query = query.range((page - 1) * limit, page * limit - 1);
+
+  const { data: guides, error } = await query;
+
+  if (error) throw new Error(error.message);
+
+  return guides;
+};
