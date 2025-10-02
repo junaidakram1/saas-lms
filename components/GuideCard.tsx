@@ -36,7 +36,7 @@ const GuideCard = ({
         <p className="text-sm">{duration} minutes</p>
       </div>
 
-      <Link href={`/companions/${id}`} className="w-full">
+      <Link href={`/guides/${id}`} className="w-full">
         <button className="btn-primary w-full justify-center">
           Let's Start
         </button>
