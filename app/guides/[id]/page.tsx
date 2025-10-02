@@ -17,7 +17,7 @@ const GuideSession = async ({ params }: GuideSessionPageProps) => {
   const { name, subject, title, topic, duration } = guide;
 
   if (!user) redirect("/sign-in");
-  if (!name) redirect("/companions");
+  if (!name) redirect("/guides");
 
   return (
     <main>

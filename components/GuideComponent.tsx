@@ -50,8 +50,18 @@ const GuideComponent = ({
 
     const onMessage = (message: Message) => {
       if (message.type === "transcript" && message.transcriptType === "final") {
-        const newMessage = { role: message.role, content: message.transcript };
-        setMessages((prev) => [newMessage, ...prev]);
+        setMessages((prev) => {
+          if (prev.length > 0 && prev[0].role === message.role) {
+            const updated = [...prev];
+            updated[0] = {
+              ...updated[0],
+              content: updated[0].content + " " + message.transcript,
+            };
+            return updated;
+          }
+
+          return [{ role: message.role, content: message.transcript }, ...prev];
+        });
       }
     };
 
@@ -103,7 +113,7 @@ const GuideComponent = ({
 
   return (
     <section className="flex flex-col h-[70vh]">
-      <section className="flex gap-8 max-sm:flex-col">
+      <section className="flex gap-8 max-sm:flex-col flex-shrink-0">
         <div className="guide-section">
           <div
             className="guide-avatar"
@@ -191,7 +201,7 @@ const GuideComponent = ({
         </div>
       </section>
 
-      <section className="transcript">
+      <section className="transcript flex-1 min-h-[300px] overflow-y-auto">
         <div className="transcript-message no-scrollbar">
           {messages.map((message, index) => {
             if (message.role === "assistant") {
