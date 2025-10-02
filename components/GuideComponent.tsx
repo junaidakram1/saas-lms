@@ -28,6 +28,7 @@ const GuideComponent = ({
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [messages, setMessages] = useState<SavedMessage[]>([]);
+  const [sessionEnded, setSessionEnded] = useState(false);
 
   const lottieRef = useRef<LottieRefCurrentProps>(null);
 
@@ -46,6 +47,7 @@ const GuideComponent = ({
 
     const onCallEnd = () => {
       setCallStatus(CallStatus.FINISHED);
+      setSessionEnded(true);
     };
 
     const onMessage = (message: Message) => {
@@ -109,6 +111,7 @@ const GuideComponent = ({
   const handleDisconnect = () => {
     setCallStatus(CallStatus.FINISHED);
     vapi.stop();
+    setSessionEnded(true);
   };
 
   return (
@@ -202,6 +205,9 @@ const GuideComponent = ({
       </section>
 
       <section className="transcript flex-1 min-h-[300px] overflow-y-auto">
+        <div>
+          <h1 className="py-5">Transcript:</h1>
+        </div>
         <div className="transcript-message no-scrollbar">
           {messages.map((message, index) => {
             if (message.role === "assistant") {
@@ -223,6 +229,22 @@ const GuideComponent = ({
 
         <div className="transcript-fade" />
       </section>
+      {sessionEnded && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 text-center max-w-sm">
+            <h2 className="text-xl font-bold mb-2">Session Ended</h2>
+            <p className="text-gray-600 mb-4">
+              The call has ended. You can start a new session anytime again.
+            </p>
+            <button
+              onClick={() => setSessionEnded(false)}
+              className="bg-primary text-white px-4 py-2 rounded-md cursor-pointer"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
