@@ -6,6 +6,7 @@ import { vapi } from "@/lib/vapi.sdk";
 import Image from "next/image";
 import Lottie, { LottieRefCurrentProps } from "lottie-react";
 import soundwaves from "@/constants/soundwaves.json";
+import { addToSessionHistory } from "@/lib/actions/guide.actions";
 
 enum CallStatus {
   INACTIVE = "INACTIVE",
@@ -47,6 +48,7 @@ const GuideComponent = ({
 
     const onCallEnd = () => {
       setCallStatus(CallStatus.FINISHED);
+      addToSessionHistory(guideId);
       setSessionEnded(true);
     };
 

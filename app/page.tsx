@@ -2,12 +2,25 @@ import CTA from "@/components/CTA";
 import GuideCard from "@/components/GuideCard";
 import GuideList from "@/components/GuideList";
 import { recentSessions } from "@/constants";
+import { getAllGuides, getRecentSessions } from "@/lib/actions/guide.actions";
+import { getSubjectColor } from "@/lib/utils";
 
-const Page = () => {
+const Page = async () => {
+  const guides = await getAllGuides({ limit: 3 });
+  const recentSessionsGuides = await getRecentSessions(10);
+
   return (
     <main>
       <h1>Dashboard</h1>
       <section className="home-section">
+        {guides.map((guide) => (
+          <GuideCard
+            key={guide.id}
+            {...guide}
+            color={getSubjectColor(guide.subject)}
+          />
+        ))}
+
         <GuideCard
           id="789"
           name="Mansion Designer"
@@ -24,27 +37,11 @@ const Page = () => {
           duration={40}
           color="#caf456"
         />
-        <GuideCard
-          id="712"
-          name="Meteoroids Bender"
-          topic="Analytical Geometry"
-          subject="maths"
-          duration={50}
-          color="#6eb2ff"
-        />
-        <GuideCard
-          id="123"
-          name="Hypnotic Finger"
-          topic="Copy Writing"
-          subject="english"
-          duration={30}
-          color="#ff6ea6"
-        />
       </section>
       <section className="flex flex-col sm:flex-row gap-10">
         <GuideList
           title="Recently Completed Guides"
-          guides={recentSessions}
+          guides={recentSessionsGuides}
           classNames="w-2/3 max-lg:w-full mb-10"
         />
         <CTA />
