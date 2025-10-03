@@ -155,8 +155,7 @@ export const canStartNewSession = async () => {
   if (error) throw new Error(error.message);
 
   const sessionCount = data?.length ?? 0;
-  console.log(sessionCount);
-  const limit = 5;
+  const limit = 15;
 
   return sessionCount < limit;
 };

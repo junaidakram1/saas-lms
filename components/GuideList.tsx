@@ -2,7 +2,6 @@ import Image from "next/image";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -18,6 +17,10 @@ interface GuideListProps {
 }
 
 const GuideList = ({ title, guides, classNames }: GuideListProps) => {
+  const uniqueGuides = Array.from(
+    new Map(guides?.map((g) => [g.id, g]) ?? []).values()
+  );
+
   return (
     <article className={cn("guide-list", classNames)}>
       <h2 className="font-bold text-3xl">{title}</h2>
@@ -31,7 +34,7 @@ const GuideList = ({ title, guides, classNames }: GuideListProps) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {guides?.map(({ id, subject, name, topic, duration }) => (
+          {uniqueGuides.map(({ id, subject, name, topic, duration }) => (
             <TableRow key={id}>
               <TableCell>
                 <Link href={`/guides/${id}`}>
@@ -91,4 +94,5 @@ const GuideList = ({ title, guides, classNames }: GuideListProps) => {
     </article>
   );
 };
+
 export default GuideList;

@@ -9,6 +9,7 @@ import soundwaves from "@/constants/soundwaves.json";
 import {
   addToSessionHistory,
   canStartNewSession,
+  getGuide,
 } from "@/lib/actions/guide.actions";
 
 enum CallStatus {
@@ -33,8 +34,39 @@ const GuideComponent = ({
   const [isMuted, setIsMuted] = useState(false);
   const [messages, setMessages] = useState<SavedMessage[]>([]);
   const [sessionEnded, setSessionEnded] = useState(false);
+  const [duration, setDuration] = useState<number | null>(null);
+
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const lottieRef = useRef<LottieRefCurrentProps>(null);
+
+  useEffect(() => {
+    const fetchGuide = async () => {
+      const guide = await getGuide(guideId);
+      if (guide?.duration) {
+        console.log(guide?.duration);
+        setDuration(guide.duration);
+        console.log("duration:", duration);
+      }
+    };
+    fetchGuide();
+  }, [guideId]);
+
+  useEffect(() => {
+    if (callStatus === CallStatus.ACTIVE && duration) {
+      if (timerRef.current) clearTimeout(timerRef.current);
+
+      const durationMs = duration * 60 * 1000;
+      timerRef.current = setTimeout(() => {
+        handleDisconnect();
+        setSessionEnded(true);
+      }, durationMs);
+    }
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, [callStatus, duration]);
 
   useEffect(() => {
     if (lottieRef) {
