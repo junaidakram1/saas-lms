@@ -6,7 +6,10 @@ import { vapi } from "@/lib/vapi.sdk";
 import Image from "next/image";
 import Lottie, { LottieRefCurrentProps } from "lottie-react";
 import soundwaves from "@/constants/soundwaves.json";
-import { addToSessionHistory } from "@/lib/actions/guide.actions";
+import {
+  addToSessionHistory,
+  canStartNewSession,
+} from "@/lib/actions/guide.actions";
 
 enum CallStatus {
   INACTIVE = "INACTIVE",
@@ -98,6 +101,15 @@ const GuideComponent = ({
   };
 
   const handleCall = async () => {
+    const allowed = await canStartNewSession();
+
+    if (!allowed) {
+      alert(
+        "You’ve reached your conversation limit for this month. Upgrade your plan to continue."
+      );
+      return;
+    }
+
     setCallStatus(CallStatus.CONNECTING);
 
     const assistantOverrides = {

@@ -138,3 +138,25 @@ export const newGuidePermissions = async () => {
     return true;
   }
 };
+
+export const canStartNewSession = async () => {
+  const { userId } = await auth();
+  const supabase = createSupabaseClient();
+
+  const { data, error } = await supabase
+    .from("session_history")
+    .select("id", { count: "exact" })
+    .eq("user_id", userId)
+    .gte(
+      "created_at",
+      new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+    );
+
+  if (error) throw new Error(error.message);
+
+  const sessionCount = data?.length ?? 0;
+  console.log(sessionCount);
+  const limit = 5;
+
+  return sessionCount < limit;
+};
