@@ -245,6 +245,11 @@ const GuideComponent = ({
           </div>
         </div>
       )}
+
+      {/* TODO
+     - Timer
+     - Internet connection disclaimer
+     - more call start and end intricacies */}
     </section>
   );
 };
