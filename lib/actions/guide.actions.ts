@@ -108,3 +108,33 @@ export const getUserGuides = async (userId: string) => {
 
   return data;
 };
+
+export const newGuidePermissions = async () => {
+  const { userId, has } = await auth();
+  const supabase = createSupabaseClient();
+
+  let limit = 0;
+
+  if (has({ plan: "pro_guide" })) {
+    return true;
+  } else if (has({ feature: "2_published_guides" })) {
+    limit = 2;
+  } else if (has({ feature: "15_published_guides" })) {
+    limit = 15;
+  }
+
+  const { data, error } = await supabase
+    .from("guides")
+    .select("id", { count: "exact" })
+    .eq("author", userId);
+
+  if (error) throw new Error(error.message);
+
+  const guideCount = data?.length;
+
+  if (guideCount >= limit) {
+    return false;
+  } else {
+    return true;
+  }
+};
