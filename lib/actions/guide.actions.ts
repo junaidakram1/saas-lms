@@ -87,7 +87,7 @@ export const getUserSessions = async (userId: string, limit = 10) => {
   const supabase = createSupabaseClient();
   const { data, error } = await supabase
     .from("session_history")
-    .select(`guides:guides_id (*)`)
+    .select(`guides:guide_id (*)`)
     .eq("user_id", userId)
     .order("created_at", { ascending: false })
     .limit(limit);
@@ -95,4 +95,16 @@ export const getUserSessions = async (userId: string, limit = 10) => {
   if (error) throw new Error(error.message);
 
   return data.map(({ guides }) => guides);
+};
+
+export const getUserGuides = async (userId: string) => {
+  const supabase = createSupabaseClient();
+  const { data, error } = await supabase
+    .from("guides")
+    .select()
+    .eq("author", userId);
+
+  if (error) throw new Error(error.message);
+
+  return data;
 };
