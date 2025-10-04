@@ -10,9 +10,9 @@ const Page = async () => {
   const recentSessionsGuides = await getRecentSessions(10);
 
   return (
-    <main>
+    <main className="">
       <h1>Dashboard</h1>
-      <section className="home-section">
+      <section className="home-section mt-10">
         {guides.map((guide) => (
           <GuideCard
             key={guide.id}
@@ -20,25 +20,8 @@ const Page = async () => {
             color={getSubjectColor(guide.subject)}
           />
         ))}
-
-        <GuideCard
-          id="789"
-          name="Mansion Designer"
-          topic="Industrial Design"
-          subject="Design"
-          duration={45}
-          color="#7cff6e"
-        />
-        <GuideCard
-          id="789"
-          name="Eye for Eye"
-          topic="Optometry"
-          subject="science"
-          duration={40}
-          color="#caf456"
-        />
       </section>
-      <section className="flex flex-col sm:flex-row gap-10">
+      <section className="flex flex-col sm:flex-row gap-10 mt-30">
         <GuideList
           title="Recently Completed Guides"
           guides={recentSessionsGuides}

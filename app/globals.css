@@ -38,7 +38,22 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  --background: oklch(1 0 0);
+  /* --background: linear-gradient(160deg, #f8fafc, #f1f5f9, #e2e8f0);
+  linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+   */
+  /* --background: linear-gradient(-20deg, #e9defa 0%, #fbfcdb 100%); */
+  /* --background: linear-gradient(160deg, #f8fafc, #f1f5f9, #e2e8f0); */
+  /* --background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+   */
+
+  /* --background: linear-gradient(
+    -225deg,
+    rgb(249, 232, 209) 0%,
+    #e3dfde 25%,
+    #e3dfde 65%,
+    #fb7d00 100%
+  ); */
+  --background: linear-gradient(to bottom, #f3ebdf 0%, white 100%);
   --foreground: oklch(0.145 0 0);
 }
 
@@ -87,6 +102,9 @@
 
 body {
   font-family: var(--font-bricolage);
+  background: var(--background);
+  background-attachment: fixed;
+  background-size: cover;
 }
 
 .dark {
@@ -147,7 +165,24 @@ body {
     @apply flex flex-wrap gap-4 w-full max-md:justify-center;
   }
   .guide-card {
-    @apply flex flex-col rounded-4xl border border-black px-4 py-4 gap-5 w-full min-lg:max-w-[410px] justify-between;
+    @apply flex flex-col rounded-2xl px-6 py-6 gap-5 w-full min-lg:max-w-[410px] justify-between;
+
+    /* Glass effect */
+    background: rgba(255, 255, 255, 0.05); /* translucent white */
+    border: 4px solid rgba(255, 255, 255, 0.1); /* subtle border */
+    backdrop-filter: blur(12px) saturate(150%); /* frosted look */
+    -webkit-backdrop-filter: blur(12px) saturate(150%); /* Safari support */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6); /* elevated shadow */
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.4s ease;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+
+  .guide-card:hover {
+    transform: translate(-4px, 4px) rotateX(5deg) rotateY(-5deg) scale(1.01);
+    box-shadow: 12px 18px 28px rgba(0, 0, 0, 0.7);
+    background: rgba(255, 255, 255, 0.08);
   }
   .subject-badge {
     @apply bg-black text-white rounded-4xl text-sm px-2 py-1 capitalize;
@@ -171,7 +206,14 @@ body {
     @apply bg-primary text-white rounded-xl cursor-pointer px-4 py-2 flex items-center gap-2;
   }
   .navbar {
-    @apply flex items-center justify-between mx-auto w-full px-14 py-4 bg-white max-sm:px-4;
+    @apply flex items-center justify-between mx-auto w-full px-14 py-4 bg-background max-sm:px-4;
+
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1), 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
   }
   .btn-signin {
     @apply border border-black rounded-4xl px-4 py-2.5 text-sm font-semibold flex items-center gap-2 cursor-pointer;

@@ -73,7 +73,7 @@ const ProfilePage = async () => {
             My Guides {`(${guides.length})`}
           </AccordionTrigger>
           <AccordionContent>
-            <GuideList title="My Companions" guides={guides} />
+            <GuideList title="My Guides" guides={guides} />
           </AccordionContent>
         </AccordionItem>
       </Accordion>
