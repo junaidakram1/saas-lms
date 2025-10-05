@@ -9,6 +9,7 @@ import { redirect } from "next/navigation";
 import { getUserGuides, getUserSessions } from "@/lib/actions/guide.actions";
 import Image from "next/image";
 import GuideList from "@/components/GuideList";
+import ProfileSkeleton from "@/components/ProfileSkeleton";
 
 const ProfilePage = async () => {
   const user = await currentUser();
@@ -18,8 +19,11 @@ const ProfilePage = async () => {
   const guides = await getUserGuides(user.id);
   const sessionHistory = await getUserSessions(user.id);
 
+  if (!guides) {
+    return <ProfileSkeleton />;
+  }
   return (
-    <main className="min-lg:w-3/4">
+    <main className="flex flex-col min-h-screen w-full max-w-5xl mx-auto px-4 mt-10">
       <section className="flex justify-between gap-4 max-sm:flex-col items-center">
         <div className="flex gap-4 items-center">
           <Image

@@ -20,17 +20,48 @@
     color: white;
     h1 {
       font-size: 128px;
-      background: linear-gradient(to right, #1267e7, #e55571);
-      background-clip: text;
+      // background: linear-gradient(to left, #c0d8fc, #7b55e5);
+      background: linear-gradient(270deg, #c4cdf9, rgb(217, 192, 254), #b2b299);
+      background-size: 600% 600%;
       -webkit-background-clip: text;
       color: transparent;
+      animation: gradientShift 6s ease infinite;
+      // background-clip: text;
+      // -webkit-background-clip: text;
+      // color: transparent;
+      // text-shadow: 0 0 20px rgba(129, 140, 248, 0.4);
+
       @media screen and (max-width: 1280px) {
         font-size: 64px;
       }
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+    }
+
+    h2 {
+      color: #ffffff;
+      backdrop-filter: blur(1px);
+      text-shadow: 0 2px 4px rgba(250, 250, 250, 0.7);
+      background-clip: text;
+      -webkit-background-clip: text;
     }
     h3 {
       font-weight: 400;
       max-width: 70%;
+      color: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(4px);
+      text-shadow: 0 2px 4px rgba(250, 250, 250, 0.3);
+      background-clip: text;
+      -webkit-background-clip: text;
       @media screen and (max-width: 1024px) {
         max-width: 100%;
       }
@@ -71,10 +102,10 @@
     }
     .btn-down--blue {
       color: rgb(243, 247, 254);
-      border: 3.3px solid #8974e6;
+      border: 3.3px solid #9283d7;
     }
     .btn-down--blue::before {
-      background: #8974e6;
+      background: #9283d7;
     } /* a { padding: 15px 25px; background-color: #217bfe; color: white; border-radius: 20px; font-size: 14px; margin-top: 20px; &:hover { background-color: white; color: #217bfe; } } */
   }
   .right {

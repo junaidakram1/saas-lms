@@ -1,5 +1,6 @@
 import CTA from "@/components/CTA";
 import GuideCard from "@/components/GuideCard";
+import GuideCardSkeleton from "@/components/GuideCardSkeleton";
 import GuideList from "@/components/GuideList";
 import { recentSessions } from "@/constants";
 import { getAllGuides, getRecentSessions } from "@/lib/actions/guide.actions";
@@ -8,7 +9,9 @@ import { getSubjectColor } from "@/lib/utils";
 const Page = async () => {
   const guides = await getAllGuides({ limit: 5 });
   const recentSessionsGuides = await getRecentSessions(10);
-
+  if (!guides || guides.length === 0) {
+    return <GuideCardSkeleton />;
+  }
   return (
     <main>
       <div className="flex justify-center">

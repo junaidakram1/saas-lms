@@ -8,6 +8,7 @@ const navItems = [
   { label: "Home", href: "/" },
   { label: "Guides", href: "/guides" },
   { label: "My Journey", href: "/my-journey" },
+  { label: "Take A Break", href: "/break" },
 ];
 
 const NavItems = () => {

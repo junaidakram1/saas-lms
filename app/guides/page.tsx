@@ -3,6 +3,7 @@ import GuideCard from "@/components/GuideCard";
 import { getSubjectColor } from "@/lib/utils";
 import SearchInput from "@/components/SearchInput";
 import SubjectFilter from "@/components/SubjectFilter";
+import GuideCardSkeleton from "@/components/GuideCardSkeleton";
 
 const GuideLibrary = async ({
   searchParams,
@@ -16,6 +17,9 @@ const GuideLibrary = async ({
 
   const guides = await getAllGuides({ subject, topic, page: 1, limit: 10 });
 
+  if (!guides || guides.length === 0) {
+    return <GuideCardSkeleton />;
+  }
   return (
     <main>
       <section className="flex justify-between gap-4 max-sm:flex-col">

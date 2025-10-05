@@ -1,4 +1,5 @@
 import GuideForm from "@/components/GuideForm";
+import GuideFormSkeleton from "@/components/GuideFormSkeleton";
 import { newGuidePermissions } from "@/lib/actions/guide.actions";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
@@ -10,6 +11,9 @@ const NewGuide = async () => {
   if (!userId) redirect("/sign-in");
 
   const canCreateGuide = await newGuidePermissions();
+
+  if (!canCreateGuide) return <GuideFormSkeleton />;
+
   return (
     <main className="min-lg:w-1/3 min-md:w-2/3 items-center justify-center py-5 mt-10">
       {canCreateGuide ? (

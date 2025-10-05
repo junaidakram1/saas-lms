@@ -4,10 +4,31 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "./Break.module.scss";
 import { TypeAnimation } from "react-type-animation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import PageSkeleton from "@/components/PageSkeleton";
 
 const Break = () => {
   const [typingStatus, setTypingStatus] = useState("human1");
+  const { user, isLoaded } = useUser();
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (isLoaded && !user) {
+      router.push("/sign-in");
+    }
+  }, [user, isLoaded, router]);
+
+  if (!isLoaded || !user) return null;
+
+  if (loading) return <PageSkeleton />;
 
   return (
     <div className={`${styles.homepage} ${styles.blackBg}`}>
@@ -20,18 +41,20 @@ const Break = () => {
       />
 
       <div className={styles.left}>
-        <h1>JD AI</h1>
-        <h2>Supercharge Your Creativity & Productivity</h2>
+        <div className="">
+          <h1 className="font-bold text-2xl">{user?.firstName || "there"}!</h1>
+        </div>
+        <h2>Recharge Your Mind & Body!</h2>
         <h3>
-          Meet JuniDepp (JD) AI, your intelligent chatbot that helps you
-          generate ideas, solve problems, and boost productivity — all with
-          effortless conversations.
+          Step away from your lessons and give yourself a moment to relax. Take
+          a short pause, clear your thoughts, and refresh your energy, so you
+          can return focused, creative, and ready to learn.
         </h3>
         <Link
           href="/"
           className={`${styles.btn} ${styles["btn-down"]} ${styles["btn-down--blue"]}`}
         >
-          Get Started!
+          Back To Grind!
         </Link>
       </div>
 
@@ -62,16 +85,16 @@ const Break = () => {
             />
             <TypeAnimation
               sequence={[
-                "Human: We produce food for Mice",
+                "Human: I think I need a break...",
                 2000,
                 () => setTypingStatus("bot"),
-                "Bot: We produce food for Hamsters",
+                "Bot: Agreed. Let’s grab some coffee ☕",
                 2000,
                 () => setTypingStatus("human2"),
-                "Human2: We produce food for Capybaras",
+                "Human: I think I need a break...",
                 2000,
                 () => setTypingStatus("bot"),
-                "Bot: We produce food for Chinchillas",
+                "Bot: Agreed. Let’s grab some coffee ☕",
                 2000,
                 () => setTypingStatus("human1"),
               ]}
