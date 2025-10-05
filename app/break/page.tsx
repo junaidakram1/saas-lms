@@ -84,13 +84,13 @@ const Break = () => {
         </div>
       </div>
 
-      <div className={styles.terms}>
+      {/* <div className={styles.terms}>
         <div className={styles.links}>
           <Link href="/">Terms of Service</Link>
           <span>|</span>
           <Link href="/">Privacy Policy</Link>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
