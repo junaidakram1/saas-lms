@@ -38,7 +38,7 @@ const ProfilePage = async () => {
           </div>
         </div>
         <div className="flex gap-4">
-          <div className="border border-black rouded-lg p-3 gap-2 flex flex-col h-fit">
+          <div className="border-[1.5px] border-[#3F2B96] rounded-lg p-3 gap-2 flex flex-col h-fit">
             <div className="flex gap-2 items-center">
               <Image
                 src="/icons/check.svg"
@@ -50,7 +50,7 @@ const ProfilePage = async () => {
             </div>
             <div>Lessons completed</div>
           </div>
-          <div className="border border-black rouded-lg p-3 gap-2 flex flex-col h-fit">
+          <div className="border-[1.5px] border-[#3F2B96] rounded-md p-3 gap-2 flex flex-col h-fit">
             <div className="flex gap-2 items-center">
               <Image src="/icons/cap.svg" alt="cap" width={22} height={22} />
               <p className="text-2xl font-bold">{guides.length}</p>
@@ -60,7 +60,10 @@ const ProfilePage = async () => {
         </div>
       </section>
       <Accordion type="multiple">
-        <AccordionItem value="recent">
+        <AccordionItem
+          value="recent"
+          className="border-b-[3px] border-[#3F2B96]"
+        >
           <AccordionTrigger className="text-2xl font-bold">
             Recent Sessions
           </AccordionTrigger>
@@ -68,7 +71,10 @@ const ProfilePage = async () => {
             <GuideList title="Recent Sessions" guides={sessionHistory} />
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value="guides">
+        <AccordionItem
+          value="guides"
+          className="border-b-[2px] border-gray-800"
+        >
           <AccordionTrigger className="text-2xl font-bold">
             My Guides {`(${guides.length})`}
           </AccordionTrigger>

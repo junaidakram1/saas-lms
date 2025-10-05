@@ -11,11 +11,16 @@ const NewGuide = async () => {
 
   const canCreateGuide = await newGuidePermissions();
   return (
-    <main className="min-lg:w-1/3 min-md:w-2/3 items-center justify-center py-5">
+    <main className="min-lg:w-1/3 min-md:w-2/3 items-center justify-center py-5 mt-10">
       {canCreateGuide ? (
         <article className="w-full gap-4 flex flex-col">
-          <h1 className="text-center">Guide Creator</h1>
-          <h2 className="text-center font-semibold">Build a New Guide</h2>
+          <div className="text-center">
+            <h1 className=" text-3xl font-extrabold uppercase tracking-[0.1em] text-black underliner">
+              Guide Creator
+            </h1>
+          </div>
+
+          <h2 className="text-center font-semibold mb-7">Build a New Guide</h2>
           <GuideForm />
         </article>
       ) : (

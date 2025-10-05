@@ -6,12 +6,14 @@ import { getAllGuides, getRecentSessions } from "@/lib/actions/guide.actions";
 import { getSubjectColor } from "@/lib/utils";
 
 const Page = async () => {
-  const guides = await getAllGuides({ limit: 3 });
+  const guides = await getAllGuides({ limit: 5 });
   const recentSessionsGuides = await getRecentSessions(10);
 
   return (
-    <main className="">
-      <h1>Dashboard</h1>
+    <main>
+      <div className="flex justify-center">
+        <h1 className="underliner">Dashboard</h1>
+      </div>
       <section className="home-section mt-10">
         {guides.map((guide) => (
           <GuideCard
@@ -25,7 +27,7 @@ const Page = async () => {
         <GuideList
           title="Recently Completed Guides"
           guides={recentSessionsGuides}
-          classNames="w-2/3 max-lg:w-full mb-10"
+          classNames="w-2/3 max-lg:w-full mb-10 "
         />
         <CTA />
       </section>

@@ -3,6 +3,7 @@ import { Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { ClerkProvider } from "@clerk/nextjs";
+import NavbarWrapper from "@/components/NavbarWrapper";
 
 const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
@@ -30,7 +31,7 @@ export default function RootLayout({
             },
           }}
         >
-          <Navbar />
+          <NavbarWrapper />
           {children}
         </ClerkProvider>
       </body>

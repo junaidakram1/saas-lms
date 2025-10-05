@@ -5,7 +5,7 @@ import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 const Navbar = () => {
   return (
-    <div className="navbar">
+    <div className="navbar mb-2">
       <Link href="/" className="flex items-center gap-2.5 cursor-pointer">
         <Image
           src="/images/logo.png"

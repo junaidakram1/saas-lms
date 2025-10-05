@@ -37,7 +37,7 @@ const GuideCard = ({
       </div>
 
       <Link href={`/guides/${id}`} className="w-full">
-        <button className="btn-primary w-full justify-center">
+        <button className="btn-secondary w-full justify-center">
           Let's Start
         </button>
       </Link>
