@@ -23,7 +23,9 @@ const GuideLibrary = async ({
   return (
     <main>
       <section className="flex justify-between gap-4 max-sm:flex-col">
-        <h1 className="underliner after:w-[300px]">Guide Learning Hub</h1>
+        <h1 className="underliner after:w-[300px] m-auto sm:m-0">
+          Guide Learning Hub
+        </h1>
         <div className="flex gap-4">
           <SearchInput />
           <SubjectFilter />

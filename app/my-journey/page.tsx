@@ -24,7 +24,7 @@ const ProfilePage = async () => {
   }
   return (
     <main className="flex flex-col min-h-screen w-full max-w-5xl mx-auto px-4 mt-10">
-      <section className="flex justify-between gap-4 max-sm:flex-col items-center">
+      <section className="flex justify-between gap-15 max-sm:flex-col items-center">
         <div className="flex gap-4 items-center">
           <Image
             src={user.imageUrl}
@@ -41,7 +41,7 @@ const ProfilePage = async () => {
             </p>
           </div>
         </div>
-        <div className="flex gap-4">
+        <div className="flex gap-4 mb-5">
           <div className="border-[1.5px] border-[#3F2B96] rounded-lg p-3 gap-2 flex flex-col h-fit">
             <div className="flex gap-2 items-center">
               <Image
@@ -66,24 +66,32 @@ const ProfilePage = async () => {
       <Accordion type="multiple">
         <AccordionItem
           value="recent"
-          className="border-b-[3px] border-[#3F2B96]"
+          className="border-b-[3px] border-[#3F2B96] "
         >
-          <AccordionTrigger className="text-2xl font-bold">
+          <AccordionTrigger className="text-3xl font-bold">
             Recent Sessions
           </AccordionTrigger>
           <AccordionContent>
-            <GuideList title="Recent Sessions" guides={sessionHistory} />
+            <GuideList
+              title="Recent Sessions"
+              guides={sessionHistory}
+              classNames="shadow-md rounded-lg border-[6px]"
+            />
           </AccordionContent>
         </AccordionItem>
         <AccordionItem
           value="guides"
-          className="border-b-[2px] border-gray-800"
+          className="border-b-[3px] border-[#3F2B96] "
         >
-          <AccordionTrigger className="text-2xl font-bold">
+          <AccordionTrigger className="text-3xl font-bold">
             My Guides {`(${guides.length})`}
           </AccordionTrigger>
           <AccordionContent>
-            <GuideList title="My Guides" guides={guides} />
+            <GuideList
+              title="My Guides"
+              guides={guides}
+              classNames="shadow-md rounded-lg border-[6px]"
+            />
           </AccordionContent>
         </AccordionItem>
       </Accordion>

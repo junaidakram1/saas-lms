@@ -12,7 +12,7 @@ const Navbar = () => {
           alt="logo"
           width={72}
           height={72}
-          className="scale-130"
+          className="hidden sm:block scale-130"
         />
       </Link>{" "}
       <NavItems />
