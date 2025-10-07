@@ -71,10 +71,12 @@ export const addToSessionHistory = async (guideId: string) => {
 };
 
 export const getRecentSessions = async (limit = 10) => {
+  const { userId } = await auth();
   const supabase = createSupabaseClient();
   const { data, error } = await supabase
     .from("session_history")
     .select(`guides:guide_id (*)`)
+    .eq("user_id", userId)
     .order("created_at", { ascending: false })
     .limit(limit);
 
