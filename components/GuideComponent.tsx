@@ -71,7 +71,7 @@ const GuideComponent = ({
   }, [callStatus, duration]);
 
   useEffect(() => {
-    const cumulativeLimitSeconds = 60;
+    const cumulativeLimitSeconds = 60 * 5;
 
     const checkCumulativeDuration = async () => {
       if (!sessionStartTimeRef.current) return;
