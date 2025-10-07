@@ -10,6 +10,7 @@ import {
   addToSessionHistory,
   canStartNewSession,
   getGuide,
+  getCumulativeSessionTime,
 } from "@/lib/actions/guide.actions";
 
 enum CallStatus {
@@ -38,6 +39,7 @@ const GuideComponent = ({
   const sessionStartTimeRef = useRef<Date | null>(null);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const cumulativeCheckIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const lottieRef = useRef<LottieRefCurrentProps>(null);
 
@@ -67,6 +69,55 @@ const GuideComponent = ({
       if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, [callStatus, duration]);
+
+  // New cumulative duration check during active call
+  useEffect(() => {
+    const cumulativeLimitSeconds = 60; // 1 minute cumulative limit
+
+    const checkCumulativeDuration = async () => {
+      if (!sessionStartTimeRef.current) return;
+
+      try {
+        const cumulativeDuration = await getCumulativeSessionTime();
+        const elapsedCurrentSession =
+          (new Date().getTime() - sessionStartTimeRef.current.getTime()) / 1000;
+
+        if (
+          cumulativeDuration + elapsedCurrentSession >=
+          cumulativeLimitSeconds
+        ) {
+          console.log(
+            `Cumulative duration limit exceeded: ${
+              cumulativeDuration + elapsedCurrentSession
+            }s >= ${cumulativeLimitSeconds}s`
+          );
+          handleDisconnect();
+          setSessionEnded(true);
+        }
+      } catch (error) {
+        console.error("Error checking cumulative session duration", error);
+      }
+    };
+
+    if (callStatus === CallStatus.ACTIVE) {
+      cumulativeCheckIntervalRef.current = setInterval(
+        checkCumulativeDuration,
+        5000
+      );
+    } else {
+      if (cumulativeCheckIntervalRef.current) {
+        clearInterval(cumulativeCheckIntervalRef.current);
+        cumulativeCheckIntervalRef.current = null;
+      }
+    }
+
+    return () => {
+      if (cumulativeCheckIntervalRef.current) {
+        clearInterval(cumulativeCheckIntervalRef.current);
+        cumulativeCheckIntervalRef.current = null;
+      }
+    };
+  }, [callStatus]);
 
   useEffect(() => {
     if (lottieRef) {
@@ -325,9 +376,9 @@ const GuideComponent = ({
       )}
 
       {/* TODO
-     - Timer
-     - Internet connection disclaimer
-     - more call start and end intricacies */}
+       - Timer
+       - Internet connection disclaimer
+       - more call start and end intricacies */}
     </section>
   );
 };
