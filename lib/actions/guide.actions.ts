@@ -159,7 +159,7 @@ export const canStartNewSession = async () => {
   const { userId } = await auth();
   const supabase = createSupabaseClient();
 
-  const limitTimeInSeconds = 1 * 60;
+  const limitTimeInSeconds = 5 * 60;
 
   const cumulativeDuration = await getCumulativeSessionTime();
 

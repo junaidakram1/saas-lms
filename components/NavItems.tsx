@@ -15,7 +15,7 @@ const NavItems = () => {
   const pathname = usePathname();
 
   return (
-    <nav className="flex items-center gap-10 cursor-pointer">
+    <nav className="flex items-center gap-5 cursor-pointer sm:gap-10">
       {navItems.map(({ label, href }) => (
         <Link
           href={href}

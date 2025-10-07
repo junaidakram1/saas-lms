@@ -70,9 +70,8 @@ const GuideComponent = ({
     };
   }, [callStatus, duration]);
 
-  // New cumulative duration check during active call
   useEffect(() => {
-    const cumulativeLimitSeconds = 60; // 1 minute cumulative limit
+    const cumulativeLimitSeconds = 60;
 
     const checkCumulativeDuration = async () => {
       if (!sessionStartTimeRef.current) return;

@@ -27,11 +27,10 @@ const GuideLibrary = async ({
   return (
     <main>
       <section className="flex justify-between gap-4 max-sm:flex-col">
-        <h1 className="underliner after:w-[300px] m-auto sm:m-0">
+        <h1 className=" m-auto sm:m-0 sm:underliner sm:after:w-[300px]">
           Guide Learning Hub
         </h1>
-        <div className="flex gap-4">
-          {/* Wrap client components in Suspense */}
+        <div className="flex gap-4 mt-10 sm:mt-0">
           <Suspense fallback={<div>Loading Search...</div>}>
             <SearchInput />
           </Suspense>
