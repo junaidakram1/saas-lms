@@ -35,6 +35,7 @@ const GuideComponent = ({
   const [messages, setMessages] = useState<SavedMessage[]>([]);
   const [sessionEnded, setSessionEnded] = useState(false);
   const [duration, setDuration] = useState<number | null>(null);
+  const sessionStartTimeRef = useRef<Date | null>(null);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -46,7 +47,6 @@ const GuideComponent = ({
       if (guide?.duration) {
         console.log(guide?.duration);
         setDuration(guide.duration);
-        console.log("duration:", duration);
       }
     };
     fetchGuide();
@@ -79,11 +79,43 @@ const GuideComponent = ({
   }, [isSpeaking, lottieRef]);
 
   useEffect(() => {
-    const onCallStart = () => setCallStatus(CallStatus.ACTIVE);
+    const onCallStart = () => {
+      setCallStatus(CallStatus.ACTIVE);
+      sessionStartTimeRef.current = new Date();
+      console.log("Call started at", sessionStartTimeRef.current);
+    };
 
-    const onCallEnd = () => {
+    const onCallEnd = async () => {
+      console.log(">>> onCallEnd triggered");
       setCallStatus(CallStatus.FINISHED);
-      addToSessionHistory(guideId);
+
+      if (!sessionStartTimeRef.current) {
+        console.error(
+          "Call ended but session start time is missing! Cannot calculate duration."
+        );
+        return;
+      }
+
+      const endTime = new Date();
+      const diffMs = endTime.getTime() - sessionStartTimeRef.current.getTime();
+      const durationSeconds = Math.floor(diffMs / 1000);
+
+      console.log(
+        "Call ended. Duration (seconds):",
+        durationSeconds,
+        "for guideId:",
+        guideId
+      );
+
+      try {
+        console.log("Trying to add session history...");
+        await addToSessionHistory({ guideId, durationSeconds });
+
+        console.log("Session history recorded successfully");
+      } catch (error) {
+        console.error("Failed to add session history", error);
+      }
+
       setSessionEnded(true);
     };
 

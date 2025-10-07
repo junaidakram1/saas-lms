@@ -57,12 +57,26 @@ export const getGuide = async (id: string) => {
   return data[0];
 };
 
-export const addToSessionHistory = async (guideId: string) => {
+export const addToSessionHistory = async (params: {
+  guideId: string;
+  durationSeconds: number;
+}) => {
+  const { guideId, durationSeconds } = params;
   const { userId } = await auth();
+
+  console.log("[DEBUG] addToSessionHistory called");
+  console.log("UserId from auth():", userId);
+  console.log("guideId:", guideId);
+  console.log("durationSeconds:", durationSeconds);
+
+  if (!userId) {
+    throw new Error("User is not authenticated or userId is missing.");
+  }
   const supabase = createSupabaseClient();
   const { data, error } = await supabase.from("session_history").insert({
     guide_id: guideId,
     user_id: userId,
+    duration: durationSeconds,
   });
 
   if (error) throw new Error(error.message);
@@ -145,6 +159,14 @@ export const canStartNewSession = async () => {
   const { userId } = await auth();
   const supabase = createSupabaseClient();
 
+  const limitTimeInSeconds = 1 * 60;
+
+  const cumulativeDuration = await getCumulativeSessionTime();
+
+  if (cumulativeDuration >= limitTimeInSeconds) {
+    return false;
+  }
+
   const { data, error } = await supabase
     .from("session_history")
     .select("id", { count: "exact" })
@@ -160,4 +182,19 @@ export const canStartNewSession = async () => {
   const limit = 15;
 
   return sessionCount < limit;
+};
+
+export const getCumulativeSessionTime = async () => {
+  const { userId } = await auth();
+  const supabase = createSupabaseClient();
+  const { data, error } = await supabase
+    .from("session_history")
+    .select("duration")
+    .eq("user_id", userId);
+
+  if (error) throw new Error(error.message);
+
+  const totalDuration =
+    data?.reduce((sum, session) => sum + (session.duration || 0), 0) || 0;
+  return totalDuration;
 };
