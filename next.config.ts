@@ -1,4 +1,4 @@
-import {withSentryConfig} from "@sentry/nextjs";
+import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
   },
   images: {
     remotePatterns: [{ hostname: "img.clerk.com" }],
+  },
+  experimental: {
+    ...({ missingSuspenseWithCSRBailout: false } as any),
   },
 };
 

@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import CTA from "@/components/CTA";
 import GuideCard from "@/components/GuideCard";
 import GuideCardSkeleton from "@/components/GuideCardSkeleton";
