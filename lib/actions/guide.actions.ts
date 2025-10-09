@@ -134,7 +134,7 @@ export const newGuidePermissions = async () => {
   if (has({ plan: "pro_guide" })) {
     return true;
   } else if (has({ feature: "2_published_guides" })) {
-    limit = 5;
+    limit = 2;
   } else if (has({ feature: "15_published_guides" })) {
     limit = 15;
   }
