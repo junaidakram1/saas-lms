@@ -48,12 +48,17 @@ const GuideSession = async ({ params }: GuideSessionPageProps) => {
         </div>
       </article>
 
-      <GuideComponent
-        {...guide}
-        guideId={id}
-        userName={user.firstName!}
-        userImage={user.imageUrl!}
-      />
+      <div className="min-h-screen flex flex-col">
+        <div className="flex-1 flex flex-col">
+          <GuideComponent
+            {...guide}
+            guideId={id}
+            userName={user.firstName!}
+            userImage={user.imageUrl!}
+            className="flex-1 flex flex-col"
+          />
+        </div>
+      </div>
     </main>
   );
 };

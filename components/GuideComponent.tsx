@@ -29,6 +29,7 @@ const GuideComponent = ({
   userImage,
   style,
   voice,
+  className,
 }: GuideComponentProps) => {
   const [callStatus, setCallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -216,7 +217,7 @@ const GuideComponent = ({
   };
 
   return (
-    <section className="flex flex-col h-[70vh]">
+    <section className={cn("flex flex-col", className)}>
       <section className="flex gap-8 max-sm:flex-col flex-shrink-0">
         <div className="guide-section">
           <div

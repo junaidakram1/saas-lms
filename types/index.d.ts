@@ -79,4 +79,5 @@ interface GuideComponentProps {
   userImage: string;
   voice: string;
   style: string;
+  clasName: string;
 }
