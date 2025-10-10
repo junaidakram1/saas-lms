@@ -158,8 +158,8 @@ body {
 
 @layer components {
   .home-section {
-    @apply grid gap-4 w-full place-items-center 
-         [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))];
+    @apply grid gap-8 w-full place-items-center 
+         [grid-template-columns:repeat(auto-fit,minmax(300px,1fr))];
   }
   .guide-grid {
     @apply grid gap-8 w-full place-items-center 

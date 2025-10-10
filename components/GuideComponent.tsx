@@ -36,18 +36,16 @@ const GuideComponent = ({
   const [messages, setMessages] = useState<SavedMessage[]>([]);
   const [sessionEnded, setSessionEnded] = useState(false);
   const [duration, setDuration] = useState<number | null>(null);
+  const [remainingTime, setRemainingTime] = useState<number | null>(null);
   const sessionStartTimeRef = useRef<Date | null>(null);
-
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const cumulativeCheckIntervalRef = useRef<NodeJS.Timeout | null>(null);
-
   const lottieRef = useRef<LottieRefCurrentProps>(null);
 
   useEffect(() => {
     const fetchGuide = async () => {
       const guide = await getGuide(guideId);
       if (guide?.duration) {
-        console.log(guide?.duration);
         setDuration(guide.duration);
       }
     };
@@ -57,47 +55,55 @@ const GuideComponent = ({
   useEffect(() => {
     if (callStatus === CallStatus.ACTIVE && duration) {
       if (timerRef.current) clearTimeout(timerRef.current);
-
       const durationMs = duration * 60 * 1000;
       timerRef.current = setTimeout(() => {
         handleDisconnect();
         setSessionEnded(true);
       }, durationMs);
     }
-
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, [callStatus, duration]);
 
   useEffect(() => {
-    const cumulativeLimitSeconds = 60 * 5;
+    if (callStatus === CallStatus.ACTIVE && duration) {
+      setRemainingTime(duration * 60);
+      const interval = setInterval(() => {
+        setRemainingTime((prev) => (prev && prev > 0 ? prev - 1 : 0));
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+    if (callStatus !== CallStatus.ACTIVE) {
+      setRemainingTime(null);
+    }
+  }, [callStatus, duration]);
 
+  const formatTime = (secs: number) => {
+    const m = Math.floor(secs / 60)
+      .toString()
+      .padStart(2, "0");
+    const s = (secs % 60).toString().padStart(2, "0");
+    return `${m}:${s}`;
+  };
+
+  useEffect(() => {
+    const cumulativeLimitSeconds = 60 * 5;
     const checkCumulativeDuration = async () => {
       if (!sessionStartTimeRef.current) return;
-
       try {
         const cumulativeDuration = await getCumulativeSessionTime();
         const elapsedCurrentSession =
           (new Date().getTime() - sessionStartTimeRef.current.getTime()) / 1000;
-
         if (
           cumulativeDuration + elapsedCurrentSession >=
           cumulativeLimitSeconds
         ) {
-          console.log(
-            `Cumulative duration limit exceeded: ${
-              cumulativeDuration + elapsedCurrentSession
-            }s >= ${cumulativeLimitSeconds}s`
-          );
           handleDisconnect();
           setSessionEnded(true);
         }
-      } catch (error) {
-        console.error("Error checking cumulative session duration", error);
-      }
+      } catch (error) {}
     };
-
     if (callStatus === CallStatus.ACTIVE) {
       cumulativeCheckIntervalRef.current = setInterval(
         checkCumulativeDuration,
@@ -109,7 +115,6 @@ const GuideComponent = ({
         cumulativeCheckIntervalRef.current = null;
       }
     }
-
     return () => {
       if (cumulativeCheckIntervalRef.current) {
         clearInterval(cumulativeCheckIntervalRef.current);
@@ -132,43 +137,20 @@ const GuideComponent = ({
     const onCallStart = () => {
       setCallStatus(CallStatus.ACTIVE);
       sessionStartTimeRef.current = new Date();
-      console.log("Call started at", sessionStartTimeRef.current);
     };
-
     const onCallEnd = async () => {
-      console.log(">>> onCallEnd triggered");
       setCallStatus(CallStatus.FINISHED);
-
       if (!sessionStartTimeRef.current) {
-        console.error(
-          "Call ended but session start time is missing! Cannot calculate duration."
-        );
         return;
       }
-
       const endTime = new Date();
       const diffMs = endTime.getTime() - sessionStartTimeRef.current.getTime();
       const durationSeconds = Math.floor(diffMs / 1000);
-
-      console.log(
-        "Call ended. Duration (seconds):",
-        durationSeconds,
-        "for guideId:",
-        guideId
-      );
-
       try {
-        console.log("Trying to add session history...");
         await addToSessionHistory({ guideId, durationSeconds });
-
-        console.log("Session history recorded successfully");
-      } catch (error) {
-        console.error("Failed to add session history", error);
-      }
-
+      } catch (error) {}
       setSessionEnded(true);
     };
-
     const onMessage = (message: Message) => {
       if (message.type === "transcript" && message.transcriptType === "final") {
         setMessages((prev) => {
@@ -180,24 +162,19 @@ const GuideComponent = ({
             };
             return updated;
           }
-
           return [{ role: message.role, content: message.transcript }, ...prev];
         });
       }
     };
-
     const onSpeechStart = () => setIsSpeaking(true);
     const onSpeechEnd = () => setIsSpeaking(false);
-
-    const onError = (error: Error) => console.log("Error", error);
-
+    const onError = (error: Error) => {};
     vapi.on("call-start", onCallStart);
     vapi.on("call-end", onCallEnd);
     vapi.on("message", onMessage);
     vapi.on("error", onError);
     vapi.on("speech-start", onSpeechStart);
     vapi.on("speech-end", onSpeechEnd);
-
     return () => {
       vapi.off("call-start", onCallStart);
       vapi.off("call-end", onCallEnd);
@@ -216,23 +193,19 @@ const GuideComponent = ({
 
   const handleCall = async () => {
     const allowed = await canStartNewSession();
-
     if (!allowed) {
       alert(
         "You’ve reached your conversation limit for this month. Upgrade your plan to continue."
       );
       return;
     }
-
     setCallStatus(CallStatus.CONNECTING);
-
     const assistantOverrides = {
       variableValues: { subject, topic, style },
       clientMessages: ["transcript"],
       serverMessages: [],
     };
-
-    // @ts-expect-error
+    //@ts-expect-error
     vapi.start(configureAssistant(voice, style), assistantOverrides);
   };
 
@@ -269,7 +242,6 @@ const GuideComponent = ({
                 className="max-sm:w-fit"
               />
             </div>
-
             <div
               className={cn(
                 "absolute transition-opacity duration-1000",
@@ -286,7 +258,6 @@ const GuideComponent = ({
           </div>
           <p className="font-bold text-2xl">{name}</p>
         </div>
-
         <div className="user-section">
           <div className="user-avatar">
             <Image
@@ -329,9 +300,17 @@ const GuideComponent = ({
               ? "Connecting"
               : "Start Session"}
           </button>
+          {callStatus === CallStatus.ACTIVE && remainingTime !== null && (
+            <p
+              className="font-mono text-center text-lg mt-2 px-4 py-2 rounded-lg border border-white/40 bg-opacity-60 backdrop-blur-sm shadow-md"
+              style={{ backgroundColor: getSubjectColor(subject) }}
+              aria-label="Session Timer"
+            >
+              Timer: {formatTime(remainingTime)}
+            </p>
+          )}
         </div>
       </section>
-
       <section className="transcript flex-1 min-h-[300px] overflow-y-auto">
         <div>
           <h1 className="py-5">Transcript:</h1>
@@ -341,8 +320,7 @@ const GuideComponent = ({
             if (message.role === "assistant") {
               return (
                 <p key={index} className="max-sm:text-sm">
-                  {name.split(" ")[0].replace("/[.,]/g, ", "")}:{" "}
-                  {message.content}
+                  {name.split(" ")[0].replace(/[.,]/g, " ")}: {message.content}
                 </p>
               );
             } else {
@@ -354,7 +332,6 @@ const GuideComponent = ({
             }
           })}
         </div>
-
         <div className="transcript-fade" />
       </section>
       {sessionEnded && (
@@ -373,11 +350,6 @@ const GuideComponent = ({
           </div>
         </div>
       )}
-
-      {/* TODO
-       - Timer
-       - Internet connection disclaimer
-       - more call start and end intricacies */}
     </section>
   );
 };
