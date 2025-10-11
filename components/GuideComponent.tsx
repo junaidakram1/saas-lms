@@ -89,7 +89,7 @@ const GuideComponent = ({
   };
 
   useEffect(() => {
-    const cumulativeLimitSeconds = 60 * 5;
+    const cumulativeLimitSeconds = 6000 * 5;
     const checkCumulativeDuration = async () => {
       if (!sessionStartTimeRef.current) return;
       try {
@@ -259,7 +259,7 @@ const GuideComponent = ({
           </div>
           <p className="font-bold text-2xl">{name}</p>
         </div>
-        <div className="user-section">
+        <div className="user-section flex flex-col gap-4 w-full">
           <div className="user-avatar">
             <Image
               src={userImage}
@@ -285,31 +285,33 @@ const GuideComponent = ({
               {isMuted ? "Turn on microphone" : "Turn off microphone"}
             </p>
           </button>
-          <button
-            className={cn(
-              "rounded-lg py-2 cursor-pointer transition-colors w-full text-white",
-              callStatus === CallStatus.ACTIVE ? "bg-red-700" : "bg-primary",
-              callStatus === CallStatus.CONNECTING && "animate-pulse"
-            )}
-            onClick={
-              callStatus === CallStatus.ACTIVE ? handleDisconnect : handleCall
-            }
-          >
-            {callStatus === CallStatus.ACTIVE
-              ? "End Session"
-              : callStatus === CallStatus.CONNECTING
-              ? "Connecting"
-              : "Start Session"}
-          </button>
-          {callStatus === CallStatus.ACTIVE && remainingTime !== null && (
-            <p
-              className="font-mono text-center text-lg mt-2 px-4 py-2 rounded-lg border border-white/40 bg-opacity-60 backdrop-blur-sm shadow-md"
-              style={{ backgroundColor: getSubjectColor(subject) }}
-              aria-label="Session Timer"
+          <div className="flex flex-col gap-2 w-full">
+            <button
+              className={cn(
+                "rounded-lg py-2 cursor-pointer transition-colors w-full text-white",
+                callStatus === CallStatus.ACTIVE ? "bg-red-700" : "bg-primary",
+                callStatus === CallStatus.CONNECTING && "animate-pulse"
+              )}
+              onClick={
+                callStatus === CallStatus.ACTIVE ? handleDisconnect : handleCall
+              }
             >
-              Timer: {formatTime(remainingTime)}
-            </p>
-          )}
+              {callStatus === CallStatus.ACTIVE
+                ? "End Session"
+                : callStatus === CallStatus.CONNECTING
+                ? "Connecting"
+                : "Start Session"}
+            </button>
+            {callStatus === CallStatus.ACTIVE && remainingTime !== null && (
+              <p
+                className="font-mono text-center text-lg mt-2 px-4 py-2 rounded-lg border border-white/40 bg-opacity-60 backdrop-blur-sm shadow-md"
+                style={{ backgroundColor: getSubjectColor(subject) }}
+                aria-label="Session Timer"
+              >
+                Timer: {formatTime(remainingTime)}
+              </p>
+            )}
+          </div>
         </div>
       </section>
       <section className="transcript flex-1 min-h-[300px] overflow-y-auto">
